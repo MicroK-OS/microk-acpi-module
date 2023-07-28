@@ -105,22 +105,26 @@ void ACPIManager::PrintTable(SDTHeader *sdt) {
 	MKMI_Printf(" %s   %s  %d\r\n", sig, oem, sdt->Length);
 }
 
-SDTHeader *ACPIManager::FindTable(SDTHeader *sdtHeader, char *signature, size_t index) {
+SDTHeader *ACPIManager::FindTable(char *signature, size_t index) {
 	static size_t found = 0;
 
 	/* Finding the number of entries */
-        int entries = (sdtHeader->Length - sizeof(SDTHeader) ) / MainSDTType;
+        int entries = (MainSDT->Length - sizeof(SDTHeader) ) / MainSDTType;
         for (int i = 0; i < entries; i++) {
 		/* Getting the table header */
-                SDTHeader *newSDTHeader = (SDTHeader*)*(uintptr_t*)((uintptr_t)sdtHeader + sizeof(SDTHeader) + (i * MainSDTType));
+		uintptr_t addr = *(uintptr_t*)((uintptr_t)MainSDT + sizeof(SDTHeader) + (i * MainSDTType));
+		SDTHeader *newSDTHeader = addr + HIGHER_HALF;
 
 		/* Checking if the signatures match */
                 for (int j = 0; j < 4; j++) {
                         if(newSDTHeader->Signature[j] != signature[j]) break;
 			/* If so, then return the table header */
 		
-			if(++found < index) break;
-			return newSDTHeader;
+			if(j == 3) {
+				if(++found < index) break;
+
+				return newSDTHeader;
+			}
                 }
         }
 

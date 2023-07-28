@@ -109,7 +109,7 @@ public:
 
 	void Panic(const char *message);
 
-	SDTHeader *FindTable(SDTHeader *sdtHeader, char *signature, size_t index);
+	SDTHeader *FindTable(char *signature, size_t index);
 private:
 	void PrintTable(SDTHeader *sdt);
 
