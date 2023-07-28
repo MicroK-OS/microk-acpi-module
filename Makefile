@@ -1,7 +1,7 @@
 include ../../Makefile.inc
 
 MODDIR = .
-MODNAME = vendorid-productid-modname
+MODNAME = cafebabe-a3c1c0de-acpi-module
 
 COMMON_CFLAGS = -ffreestanding             \
 	 -fno-stack-protector          \
