@@ -90,6 +90,19 @@ void HandlePackageOp(AML_Hashmap *hashmap, TokenList *list, uint8_t *data, size_
 
 }
 
+void HandleMethodOp(AML_Hashmap *hashmap, TokenList *list, uint8_t *data, size_t *idx) {
+	uint32_t pkgLength = 0;
+	HandlePkgLengthType((uint8_t*)&pkgLength, data, idx);
+
+	NameType name;
+	HandleNameType(&name, data, idx);
+
+	uint32_t methodFlags = data[*idx];
+	*idx += 1;
+
+	AddToken(list, METHOD, pkgLength, &name, methodFlags);
+}
+
 void HandleExtendedOp(AML_Hashmap *hashmap, TokenList *list, uint8_t *data, size_t *idx) {
 	*idx += 1;
 	switch(data[*idx - 1]) {

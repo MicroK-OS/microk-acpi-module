@@ -78,6 +78,17 @@ void AddToken(TokenList *tokenList, TokenType type, ...) {
 			newToken->Package.NumElements = numElements & 0xFF;
 			}
 			break;
+		case METHOD: {
+			uint32_t pkgLength = va_arg(ap, uint32_t);
+			NameType *name = va_arg(ap, NameType*);
+			uint32_t methodFlags = va_arg(ap, uint32_t);
+			newToken->Method.PkgLength = pkgLength;
+			newToken->Method.Name.SegmentNumber = name->SegmentNumber;
+			newToken->Method.Name.NameSegments = name->NameSegments;
+			newToken->Method.Name.IsRoot = name->IsRoot;
+			newToken->Method.MethodFlags = methodFlags & 0xFF;
+			}
+			break;
 		case REGION: {
 			NameType *name = va_arg(ap, NameType*);
 			uint32_t space = va_arg(ap, uint32_t);

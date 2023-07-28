@@ -15,6 +15,7 @@ void HandleStringPrefix(AML_Hashmap *hashmap, TokenList *list, uint8_t *data, si
 void HandleScopeOp(AML_Hashmap *hashmap, TokenList *list, uint8_t *data, size_t *idx);
 void HandleBufferOp(AML_Hashmap *hashmap, TokenList *list, uint8_t *data, size_t *idx);
 void HandlePackageOp(AML_Hashmap *hashmap, TokenList *list, uint8_t *data, size_t *idx);
+void HandleMethodOp(AML_Hashmap *hashmap, TokenList *list, uint8_t *data, size_t *idx);
 
 void HandleExtendedOp(AML_Hashmap *hashmap, TokenList *list, uint8_t *data, size_t *idx);
 

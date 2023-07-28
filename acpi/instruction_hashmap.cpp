@@ -24,7 +24,7 @@ AML_Hashmap *CreateHashmap() {
 	hashmap->Entries[10] = (AML_HashmapEntry){AML_BUFFER_OP, HandleBufferOp};
 	hashmap->Entries[11] = (AML_HashmapEntry){AML_PACKAGE_OP, HandlePackageOp};
 	hashmap->Entries[12] = (AML_HashmapEntry){AML_VARPACKAGE_OP, NULL};
-	hashmap->Entries[13] = (AML_HashmapEntry){AML_METHOD_OP, NULL};
+	hashmap->Entries[13] = (AML_HashmapEntry){AML_METHOD_OP, HandleMethodOp};
 	hashmap->Entries[14] = (AML_HashmapEntry){AML_EXTERNAL_OP, NULL};
 	hashmap->Entries[15] = (AML_HashmapEntry){AML_DUAL_PREFIX, NULL};
 	hashmap->Entries[16] = (AML_HashmapEntry){AML_MULTI_PREFIX, NULL};

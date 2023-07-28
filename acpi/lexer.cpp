@@ -44,7 +44,7 @@ int AMLExecutive::Parse(uint8_t *data, size_t size) {
 	}
 
 	MKMI_Printf("Done parsing %d bytes of AML code.\r\n", size);
-	return 0;
+//	return 0;
 
 	Token *current = RootTokenList->Head;
 
@@ -94,6 +94,12 @@ int AMLExecutive::Parse(uint8_t *data, size_t size) {
 				MKMI_Printf("PACKAGE:\r\n"
 					    " - PkgLength: %d\r\n"
 					    " - Num elements: %d\r\n", current->Package.PkgLength, current->Package.NumElements);
+				break;
+			case METHOD:
+				MKMI_Printf("METHOD:\r\n"
+					    " - PkgLength: %d\r\n"
+					    " - Method flags: %d\r\n", current->Method.PkgLength, current->Method.MethodFlags);
+				PrintName(current->Method.Name.NameSegments, current->Method.Name.SegmentNumber, current->Method.Name.IsRoot);
 				break;
 			case REGION:
 				MKMI_Printf("REGION:\r\n"

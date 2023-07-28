@@ -15,6 +15,9 @@ enum TokenType {
 	SCOPE,
 	BUFFER,
 	PACKAGE,
+	
+	METHOD,
+
 	REGION,
 	FIELD,
 	DEVICE,
@@ -55,6 +58,14 @@ struct Token {
 			uint32_t PkgLength;
 			uint8_t NumElements;
 		} Package;
+
+
+		struct {
+			uint32_t PkgLength;
+			NameType Name;
+			uint8_t MethodFlags;
+		} Method;
+
 
 		struct {
 			NameType Name;
