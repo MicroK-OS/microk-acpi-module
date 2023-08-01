@@ -17,7 +17,7 @@ extern "C" uint32_t ProductID = 0xA3C1C0DE;
 
 ACPIManager *acpi;
 
-void MessageHandler(MKMI_Message *msg, uint64_t *data) {
+int MessageHandler(MKMI_Message *msg, uint64_t *data) {
 	if (*data == 0x69696969) {
 		MKMI_Printf("Asked for MCFG.\r\n");
 
@@ -27,8 +27,10 @@ void MessageHandler(MKMI_Message *msg, uint64_t *data) {
 		
 		MKMI_Printf("Sending message.\r\n");
 
-		Syscall(SYSCALL_MODULE_MESSAGE_SEND, msg->SenderVendorID, msg->SenderProductID, newMsg, 256, 0 ,0);
+		return SendDirectMessage(msg->SenderVendorID, msg->SenderProductID, newMsg, 256);
 	}
+
+	return 1;
 }
 
 extern "C" size_t OnInit() {
