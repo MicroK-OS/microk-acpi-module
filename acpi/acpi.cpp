@@ -80,6 +80,8 @@ ACPIManager::ACPIManager() {
 			} else {
 				Panic("No DSDT found");
 			}
+		} else if(Memcmp(newSDTHeader->Signature, "MCFG", 4) == 0) {
+			/* Startup PCI driver */
 		}
         }
 

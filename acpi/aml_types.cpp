@@ -67,14 +67,14 @@ void HandleIntegerType(IntegerType *integer, uint8_t *data, size_t *idx) {
 	switch(data[*idx - 1]) {
 		case AML_QWORDPREFIX:
 			moveAmount += 4;
-			integer->Data |= (data[*idx + 4] << 32);
-			integer->Data |= (data[*idx + 5] << 40);
+			integer->Data |= (data[*idx + 7] << 56);
 			integer->Data |= (data[*idx + 6] << 48);
-			integer->Data |= (data[*idx + 7] << 52);
+			integer->Data |= (data[*idx + 5] << 40);
+			integer->Data |= (data[*idx + 4] << 32);
 		case AML_DWORDPREFIX:
 			moveAmount += 2;
-			integer->Data |= (data[*idx + 2] << 16);
 			integer->Data |= (data[*idx + 3] << 24);
+			integer->Data |= (data[*idx + 2] << 16);
 		case AML_WORDPREFIX:
 			moveAmount += 1;
 			integer->Data |= (data[*idx + 1] << 8);
