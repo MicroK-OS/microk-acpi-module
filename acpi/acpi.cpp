@@ -58,7 +58,7 @@ ACPIManager::ACPIManager() {
 
 		PrintTable(newSDTHeader);
 
-		if(Memcmp(newSDTHeader->Signature, "FACP", 4) == 0) {
+		if (Memcmp(newSDTHeader->Signature, "FACP", 4) == 0) {
 			FADT = new FADTTable;
 
 			Memcpy(FADT, newSDTHeader, sizeof(FADTTable));
@@ -80,8 +80,12 @@ ACPIManager::ACPIManager() {
 			} else {
 				Panic("No DSDT found");
 			}
-		} else if(Memcmp(newSDTHeader->Signature, "MCFG", 4) == 0) {
+		} else if (Memcmp(newSDTHeader->Signature, "MCFG", 4) == 0) {
 			/* Startup PCI driver */
+		} else if (Memcmp(newSDTHeader->Signature, "SSDT", 4) == 0) {
+			/* Handle the accessory table */
+		} else {
+			/* Unknown table */
 		}
         }
 
