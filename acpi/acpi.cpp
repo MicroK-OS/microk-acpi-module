@@ -44,8 +44,6 @@ ACPIManager::ACPIManager() {
 
 
 
-	MKMI_Printf(" Table  OEM    Length \r\n"
-	            " -------------------------\r\n");
 	PrintTable(MainSDT);
 
 	FADT = NULL;
@@ -107,8 +105,8 @@ void ACPIManager::PrintTable(SDTHeader *sdt) {
 
 	Memcpy(sig, sdt->Signature, 4);
 	Memcpy(oem, sdt->OEMID, 6);
-		    
-	MKMI_Printf(" %s   %s  %d\r\n", sig, oem, sdt->Length);
+
+	MKMI_Printf("ACPI table found: %s (%s), %d bytes\r\n", sig, oem, sdt->Length);
 }
 
 SDTHeader *ACPIManager::FindTable(char *signature, size_t index) {
