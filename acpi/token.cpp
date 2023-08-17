@@ -14,24 +14,36 @@ TokenList *CreateTokenList() {
 #include <mkmi_log.h>
 // Function to create a new token and add it to the token list
 void AddToken(TokenList *tokenList, TokenType type, ...) {
+	return;
+	/* Somehow this function causes our scheduler to fail,
+	 * for some unexplicable reason. We will be investigating */
+
 	va_list ap;
 	va_start(ap, type);
 
 	Token *newToken = new Token;
 	newToken->Type = type;
 
+	newToken->Next = NULL;
+
+	if (tokenList->Head == NULL) {
+		tokenList->Head = newToken;
+		tokenList->Tail = newToken;
+	} else {
+		tokenList->Tail->Next = newToken;
+		tokenList->Tail = newToken;
+	}
+
 	switch(newToken->Type) {
 		case ALIAS: {
 			NameType *nameOne = va_arg(ap, NameType*);
+			NameType *nameTwo = va_arg(ap, NameType*);
 			newToken->Alias.NameOne.IsRoot = nameOne->IsRoot;
 			newToken->Alias.NameOne.SegmentNumber = nameOne->SegmentNumber;
 			newToken->Alias.NameOne.NameSegments = nameOne->NameSegments;
-
-			NameType *nameTwo = va_arg(ap, NameType*);
 			newToken->Alias.NameTwo.IsRoot = nameTwo->IsRoot;
 			newToken->Alias.NameTwo.SegmentNumber = nameTwo->SegmentNumber;
 			newToken->Alias.NameTwo.NameSegments = nameTwo->NameSegments;
-
 			}
 			break;
 		case NAME: {
@@ -56,19 +68,18 @@ void AddToken(TokenList *tokenList, TokenType type, ...) {
 			break;
 		case SCOPE: {
 			NameType *name = va_arg(ap, NameType*);
+			newToken->Scope.PkgLength = va_arg(ap, uint32_t);
 			newToken->Scope.Name.IsRoot = name->IsRoot;
 			newToken->Scope.Name.SegmentNumber = name->SegmentNumber;
 			newToken->Scope.Name.NameSegments = name->NameSegments;
-			
-			newToken->Scope.PkgLength = va_arg(ap, uint32_t);
 			}
 			break;
 		case BUFFER: {
 			newToken->Buffer.PkgLength = va_arg(ap, uint32_t);
 			IntegerType *bufferSize = va_arg(ap, IntegerType*);
+			newToken->Buffer.ByteList = va_arg(ap, uint8_t*);
 			newToken->Buffer.BufferSize.Data = bufferSize->Data;
 			newToken->Buffer.BufferSize.Size = bufferSize->Size;
-			newToken->Buffer.ByteList = va_arg(ap, uint8_t*);
 			}
 			break;
 		case PACKAGE: {
@@ -131,20 +142,7 @@ void AddToken(TokenList *tokenList, TokenType type, ...) {
 			break;
 	}
 
-	newToken->Next = NULL;
-
-	if (tokenList->Head == NULL) {
-		tokenList->Head = newToken;
-		tokenList->Tail = newToken;
-	} else {
-		tokenList->Tail->Next = newToken;
-		tokenList->Tail = newToken;
-	}
-
-
 	va_end(ap);
-
-	return;
 }
 
 // Function to free the memory occupied by the token list

@@ -10,7 +10,7 @@ void ParseByte(TokenList *tokens, AML_Hashmap *hashmap, uint8_t *data, size_t *i
 	AML_OpcodeHandler handler = FindHandler(hashmap, byte);
 
 	if (handler) return handler(hashmap, tokens, data, idx);
-	return AddToken(tokens, UNKNOWN, byte);	
+	AddToken(tokens, UNKNOWN, byte);	
 }
 
 AMLExecutive::AMLExecutive() {
@@ -50,7 +50,6 @@ int AMLExecutive::Parse(uint8_t *data, size_t size) {
 
 	bool error = false;
 	while (current && !error) {
-//	for (int i = 0; i < 250 && current && !error; ++i) {
 		MKMI_Printf("Token Type: ");
 		switch (current->Type) {
 			case ZERO:
