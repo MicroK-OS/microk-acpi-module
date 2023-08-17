@@ -14,10 +14,6 @@ TokenList *CreateTokenList() {
 #include <mkmi_log.h>
 // Function to create a new token and add it to the token list
 void AddToken(TokenList *tokenList, TokenType type, ...) {
-	return;
-	/* Somehow this function causes our scheduler to fail,
-	 * for some unexplicable reason. We will be investigating */
-
 	va_list ap;
 	va_start(ap, type);
 
