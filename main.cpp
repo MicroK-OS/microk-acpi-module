@@ -37,7 +37,7 @@ extern "C" size_t OnInit() {
 	SetMessageHandlerCallback(MessageHandler);
 	Syscall(SYSCALL_MODULE_MESSAGE_HANDLER, MKMI_MessageHandler, 0, 0, 0, 0, 0);
 
-	Syscall(SYSCALL_MODULE_SECTION_REGISTER, "ACPI", VendorID, ProductID, 0, 0 ,0);
+	Syscall(SYSCALL_MODULE_SECTION_REGISTER, "ACPI", VendorID, ProductID, 0, 0, 0);
 
 	acpi = new ACPIManager();
 
