@@ -1,7 +1,6 @@
 #include "aml_executive.h"
 
-#include <mkmi_log.h>
-#include <mkmi_memory.h>
+#include <mkmi.h>
 
 void ParseByte(TokenList *tokens, AML_Hashmap *hashmap, uint8_t *data, size_t *idx) {
 	uint8_t byte = data[*idx];

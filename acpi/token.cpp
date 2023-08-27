@@ -1,7 +1,7 @@
 #include "token.h"
 
 #include <stdarg.h>
-#include <mkmi_memory.h>
+#include <mkmi.h>
 
 TokenList *CreateTokenList() {
 	TokenList *list = new TokenList;

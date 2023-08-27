@@ -1,10 +1,7 @@
 #include "acpi.h"
 #include "aml_executive.h"
-#include <mkmi_memory.h>
-#include <mkmi_syscall.h>
-#include <mkmi_string.h>
-#include <mkmi_log.h>
-#include <mkmi_exit.h>
+
+#include <mkmi.h>
 #include <cdefs.h>
 
 ACPIManager::ACPIManager() {
@@ -92,7 +89,7 @@ ACPIManager::ACPIManager() {
 
 	DSDTExecutive = new AMLExecutive();
 	DSDTExecutive->Parse((uint8_t*)DSDT + sizeof(SDTHeader), DSDT->Length - sizeof(SDTHeader));
-
+	
 	MKMI_Printf("ACPI initialized.\r\n");
 }
 

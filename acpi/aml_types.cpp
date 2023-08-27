@@ -1,8 +1,7 @@
 #include "aml_types.h"
 #include "aml_opcodes.h"
 
-#include <mkmi_memory.h>
-#include <mkmi_log.h>
+#include <mkmi.h>
 
 void HandleNameTypeSegments(NameType *name, uint8_t *data, size_t *idx) {
 	if (data[*idx] == AML_DUAL_PREFIX) {

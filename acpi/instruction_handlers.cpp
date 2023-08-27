@@ -5,8 +5,7 @@
 #include "token.h"
 #include "aml_opcodes.h"
 
-#include <mkmi_log.h>
-#include <mkmi_memory.h>
+#include <mkmi.h>
 
 inline PrintOpcodes(uint8_t *data, size_t idx) {
 	for (int i = -2; i < 40; i++) MKMI_Printf("0x%x ", data[idx + i]);

@@ -2,9 +2,7 @@
 #include "instruction_handlers.h"
 #include "aml_opcodes.h"
 
-#include <mkmi_log.h>
-#include <mkmi_memory.h>
-
+#include <mkmi.h>
 
 AML_Hashmap *CreateHashmap() {
 	AML_Hashmap *hashmap = new AML_Hashmap;
