@@ -41,7 +41,7 @@ struct FADTTable {
 	uint32_t FirmwareCtrl;
 	uint32_t Dsdt;
 
-	// field used in ACPI 1.0; no longer in use, for compatibility only
+	/* Field used in ACPI 1.0; no longer in use, for compatibility only */
 	uint8_t  Reserved;
 
 	uint8_t  PreferredPowerManagementProfile;
@@ -77,19 +77,18 @@ struct FADTTable {
 	uint8_t  MonthAlarm;
 	uint8_t  Century;
 
-	// reserved in ACPI 1.0; used since ACPI 2.0+
+	/* Reserved in ACPI 1.0; used since ACPI 2.0+ */
 	uint16_t BootArchitectureFlags;
 
 	uint8_t  Reserved2;
 	uint32_t Flags;
 
-	// 12 byte structure; see below for details
 	GenericAddressStructure ResetReg;
 
 	uint8_t  ResetValue;
 	uint8_t  Reserved3[3];
 
-	// 64bit pointers - Available on ACPI 2.0+
+	/* 64bit pointers - Available on ACPI 2.0+ */
 	uint64_t                X_FirmwareControl;
 	uint64_t                X_Dsdt;
 
@@ -110,16 +109,18 @@ public:
 	void Panic(const char *message);
 
 	SDTHeader *FindTable(char *signature, size_t index);
+	bool ValidateTable(uint8_t *ptr, size_t size);
 private:
 	void PrintTable(SDTHeader *sdt);
 
 	RSDP2 *RSDP;
+
 	SDTHeader *MainSDT;
+	size_t MainSDTType;
 
 	FADTTable *FADT;
 
 	SDTHeader *DSDT;
 	AMLExecutive *DSDTExecutive;
 
-	size_t MainSDTType;
 };
