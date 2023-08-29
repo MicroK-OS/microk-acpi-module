@@ -92,7 +92,7 @@ void HandleIntegerType(IntegerType *integer, uint8_t *data, size_t *idx) {
 	integer->Size = moveAmount;
 }
 
-void HandlePkgLengthType(uint8_t *pkgLength, uint8_t *data, size_t *idx) {
+int HandlePkgLengthType(uint8_t *pkgLength, uint8_t *data, size_t *idx) {
 	uint8_t leadByte = data[*idx];
 	*pkgLength = 0;
 	uint8_t byteCount = leadByte & 0b11000000;
@@ -123,4 +123,6 @@ void HandlePkgLengthType(uint8_t *pkgLength, uint8_t *data, size_t *idx) {
 			*idx += 4;
 			break;
 	}
+
+	return byteCount;
 }

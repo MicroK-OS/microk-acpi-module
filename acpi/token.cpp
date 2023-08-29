@@ -5,6 +5,8 @@
 
 TokenList *CreateTokenList() {
 	TokenList *list = new TokenList;
+
+	list->TotalNames = 0;
 	list->Head = NULL;
 	list->Tail = NULL;
 
@@ -19,6 +21,7 @@ void AddToken(TokenList *tokenList, TokenType type, ...) {
 
 	Token *newToken = new Token;
 	newToken->Type = type;
+	newToken->Children = NULL;
 
 	newToken->Next = NULL;
 
@@ -44,6 +47,12 @@ void AddToken(TokenList *tokenList, TokenType type, ...) {
 			break;
 		case NAME: {
 			NameType *name = va_arg(ap, NameType*);
+			TokenList *children = va_arg(ap, TokenList*);
+			newToken->Children = children;
+
+			tokenList->Names[tokenList->TotalNames].Token = newToken;
+			tokenList->TotalNames++;
+
 			newToken->Name.IsRoot = name->IsRoot;
 			newToken->Name.SegmentNumber = name->SegmentNumber;
 			newToken->Name.NameSegments = name->NameSegments;
@@ -81,6 +90,9 @@ void AddToken(TokenList *tokenList, TokenType type, ...) {
 		case PACKAGE: {
 			uint32_t pkgLength = va_arg(ap, uint32_t);
 			uint32_t numElements = va_arg(ap, uint32_t);
+			TokenList *children = va_arg(ap, TokenList*);
+			newToken->Children = children;
+
 			newToken->Package.PkgLength = pkgLength;
 			newToken->Package.NumElements = numElements & 0xFF;
 			}

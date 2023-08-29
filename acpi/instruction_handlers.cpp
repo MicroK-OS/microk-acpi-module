@@ -32,7 +32,11 @@ void HandleAliasOp(AML_Hashmap *hashmap, TokenList *list, uint8_t *data, size_t 
 void HandleNameOp(AML_Hashmap *hashmap, TokenList *list, uint8_t *data, size_t *idx) {
 	NameType name;
 	HandleNameType(&name, data, idx);
-	AddToken(list, NAME, &name);
+
+	TokenList *children = CreateTokenList();
+	ParseByte(children, hashmap, data, idx);
+
+	AddToken(list, NAME, &name, children);
 }
 
 void HandleIntegerOp(AML_Hashmap *hashmap, TokenList *list, uint8_t *data, size_t *idx) {
@@ -78,14 +82,18 @@ void HandleBufferOp(AML_Hashmap *hashmap, TokenList *list, uint8_t *data, size_t
 void HandlePackageOp(AML_Hashmap *hashmap, TokenList *list, uint8_t *data, size_t *idx) {
 	uint32_t pkgLength = 0;
 	HandlePkgLengthType((uint8_t*)&pkgLength, data, idx);
-
+	
 	uint32_t numElements = 0;
 	numElements |= data[*idx];
 	*idx += 1;
 
-	/* Still have to handle some other crap */
+	TokenList *children = CreateTokenList();
 
-	AddToken(list, PACKAGE, pkgLength, numElements);
+	for(int elementsParsed = 0; elementsParsed < numElements; elementsParsed++) {
+		ParseByte(children, hashmap, data, idx);
+	}
+
+	AddToken(list, PACKAGE, pkgLength, numElements, children);
 
 }
 

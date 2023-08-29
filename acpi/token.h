@@ -91,9 +91,16 @@ struct Token {
 	Token *Next;    // Pointer to the next token in the linked list
 };
 
+struct NameData {
+	Token *Token = NULL;
+};
+
 struct TokenList {
-    Token *Head;    // Pointer to the first token in the list
-    Token *Tail;    // Pointer to the last token in the list
+	unsigned int TotalNames;
+	NameData Names[128] = {0};
+
+	Token *Head;    // Pointer to the first token in the list
+	Token *Tail;    // Pointer to the last token in the list
 };
 
 TokenList *CreateTokenList();

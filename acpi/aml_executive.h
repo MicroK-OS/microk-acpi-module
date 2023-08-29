@@ -13,6 +13,7 @@ public:
 	~AMLExecutive();
 
 	int Parse(uint8_t *data, size_t size);
+	Token *FindObject(const char *name);
 	int Execute();
 private:
 	AML_Hashmap *Hashmap;

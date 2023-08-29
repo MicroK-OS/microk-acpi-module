@@ -1,4 +1,5 @@
 #include "aml_executive.h"
+#include "token.h"
 
 #include <mkmi.h>
 
@@ -43,10 +44,9 @@ int AMLExecutive::Parse(uint8_t *data, size_t size) {
 	}
 
 	MKMI_Printf("Done parsing %d bytes of AML code.\r\n", size);
-	return 0;
 
 	Token *current = RootTokenList->Head;
-
+/*
 	bool error = false;
 	while (current && !error) {
 		MKMI_Printf("Token Type: ");
@@ -128,10 +128,32 @@ int AMLExecutive::Parse(uint8_t *data, size_t size) {
 
 		current = current->Next;
 	}
-
+*/
 	return 0;
 }
-	
+
+Token *AMLExecutive::FindObject(const char *name) {
+	Token *current = NULL;
+	size_t nameLength = Strlen(name);
+
+	for (int i = 0; i < RootTokenList->TotalNames; i++) {
+		current = RootTokenList->Names[i].Token;
+
+		if(current->Name.SegmentNumber <= 0) continue;
+		if(nameLength > current->Name.SegmentNumber * 4) continue;
+
+		if(Memcmp(current->Name.NameSegments, name, nameLength) == 0) {
+			MKMI_Printf("Found:\r\n");
+			PrintName(current->Name.NameSegments, current->Name.SegmentNumber, current->Name.IsRoot);
+			return current;
+		}
+
+	}
+
+	return NULL;
+
+}
+
 int AMLExecutive::Execute() {
 	return 0;
 }
