@@ -59,14 +59,14 @@ ACPIManager::ACPIManager() : RSDP(NULL), MainSDT(NULL), MainSDTType(0), FADT(NUL
 
 				Memcpy(FADT, newSDTHeader, sizeof(FADTTable));
 
-				if(FADT->X_Dsdt != NULL) {
+				if(FADT->X_Dsdt != 0) {
 					SDTHeader *dsdt = FADT->X_Dsdt + HIGHER_HALF;
 					DSDT = Malloc(dsdt->Length);
 
 					Memcpy(DSDT, dsdt, dsdt->Length);
 
 					PrintTable(DSDT);
-				} else if(FADT->Dsdt != NULL) {
+				} else if(FADT->Dsdt != 0) {
 					SDTHeader *dsdt = FADT->X_Dsdt + HIGHER_HALF;
 					DSDT = Malloc(dsdt->Length);
 
@@ -75,6 +75,13 @@ ACPIManager::ACPIManager() : RSDP(NULL), MainSDT(NULL), MainSDTType(0), FADT(NUL
 					PrintTable(DSDT);
 				} else {
 					Panic("No DSDT found");
+				}
+
+				if(FADT->X_FirmwareControl != 0) {
+				} else if(FADT->FirmwareControl != 0) {
+
+				} else {
+					Panic("No FACS found");
 				}
 			} else if (Memcmp(newSDTHeader->Signature, "MCFG", 4) == 0) {
 				/* Startup PCI driver */
@@ -96,7 +103,8 @@ ACPIManager::ACPIManager() : RSDP(NULL), MainSDT(NULL), MainSDTType(0), FADT(NUL
 		Panic("No FADT found");
 
 	if(FADT->SMI_CommandPort == 0 &&
-	   (FADT->AcpiEnable == 0 && FADT->AcpiDisable == 0) &&
+	   FADT->AcpiEnable == 0 &&
+	   FADT->AcpiDisable == 0 &&
 	   FADT->PM1aControlBlock & 1) {
 	   MKMI_Printf("ACPI already enabled.\r\n");
 	} else {

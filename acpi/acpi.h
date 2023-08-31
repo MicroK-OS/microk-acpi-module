@@ -38,7 +38,7 @@ struct GenericAddressStructure {
 struct FADTTable {
 	SDTHeader Header;
 
-	uint32_t FirmwareCtrl;
+	uint32_t FirmwareControl;
 	uint32_t Dsdt;
 
 	/* Field used in ACPI 1.0; no longer in use, for compatibility only */
