@@ -57,10 +57,19 @@ void HandleStringPrefix(AML_Hashmap *hashmap, TokenList *list, uint8_t *data, si
 void HandleScopeOp(AML_Hashmap *hashmap, TokenList *list, uint8_t *data, size_t *idx) {
 	uint32_t pkgLength = 0;
 
-	HandlePkgLengthType((uint8_t*)&pkgLength, data, idx);
+	int headerSize = HandlePkgLengthType((uint8_t*)&pkgLength, data, idx);
 
 	NameType name;
 	HandleNameType(&name, data, idx);
+	headerSize += 4;
+/*
+	uintptr_t fieldsEnd = (pkgLength - headerSize) + *idx;
+	TokenList *children = CreateTokenList();
+
+	while(*idx < fieldsEnd) {
+		ParseByte(children, hashmap, data, idx);
+	}*/
+
 	AddToken(list, SCOPE, &name, pkgLength);
 }
 
@@ -148,20 +157,25 @@ void HandleExtOpRegion(AML_Hashmap *hashmap, TokenList *list, uint8_t *data, siz
 
 void HandleExtOpField(AML_Hashmap *hashmap, TokenList *list, uint8_t *data, size_t *idx) {
 	uint32_t pkgLength = 0;
-	HandlePkgLengthType((uint8_t*)&pkgLength, data, idx);
+	int headerSize = HandlePkgLengthType((uint8_t*)&pkgLength, data, idx);
 
 	NameType name;
 	HandleNameType(&name, data, idx);
+	headerSize += 4;
 
 	uint32_t fieldFlags = data[*idx];
 	*idx+=1;
 
-	/* Field list here */
-/*	uint8_t *fieldData = Malloc(pkgLength);
-	Memcpy(fieldData, &data[*idx], pkgLength);
-	*idx+=pkgLength;*/
+	headerSize += 1;
 
-	AddToken(list, FIELD, pkgLength, &name, fieldFlags);
+	uintptr_t fieldsEnd = (pkgLength - headerSize) + *idx;
+	TokenList *children = CreateTokenList();
+
+	while(*idx < fieldsEnd) {
+		ParseByte(children, hashmap, data, idx);
+	}
+
+	AddToken(list, FIELD, pkgLength, &name, fieldFlags, children);
 }
 
 void HandleExtOpDevice(AML_Hashmap *hashmap, TokenList *list, uint8_t *data, size_t *idx) {

@@ -127,6 +127,9 @@ void AddToken(TokenList *tokenList, TokenType type, ...) {
 			uint32_t pkgLength = va_arg(ap, uint32_t);
 			NameType *name = va_arg(ap, NameType*);
 			uint32_t fieldFlags = va_arg(ap, uint32_t);
+			TokenList *children = va_arg(ap, TokenList*);
+			newToken->Children = children;
+
 			newToken->Field.PkgLength = pkgLength;
 			newToken->Field.Name.SegmentNumber = name->SegmentNumber;
 			newToken->Field.Name.NameSegments = name->NameSegments;
