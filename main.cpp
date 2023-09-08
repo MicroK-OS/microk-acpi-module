@@ -31,10 +31,10 @@ int MessageHandler(MKMI_Message *msg, uint64_t *data) {
 extern "C" size_t OnInit() {
 	SetMessageHandlerCallback(MessageHandler);
 	Syscall(SYSCALL_MODULE_MESSAGE_HANDLER, MKMI_MessageHandler, 0, 0, 0, 0, 0);
+	
+	acpi = new ACPIManager();
 
 	Syscall(SYSCALL_MODULE_SECTION_REGISTER, "ACPI", VendorID, ProductID, 0, 0, 0);
-
-	acpi = new ACPIManager();
 
 	return 0;
 }
