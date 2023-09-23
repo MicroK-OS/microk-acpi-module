@@ -118,7 +118,7 @@ private:
 	SDTHeader *MainSDT;
 	size_t MainSDTType;
 
-	FADTTable *FADT;
+	volatile FADTTable *FADT;
 
 	SDTHeader *DSDT;
 	AMLExecutive *DSDTExecutive;

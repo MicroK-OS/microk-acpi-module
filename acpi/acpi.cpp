@@ -105,20 +105,33 @@ ACPIManager::ACPIManager() : RSDP(NULL), MainSDT(NULL), MainSDTType(0), FADT(NUL
 	if(FADT->SMI_CommandPort == 0 &&
 	   FADT->AcpiEnable == 0 &&
 	   FADT->AcpiDisable == 0 &&
-	   FADT->PM1aControlBlock & 1) {
+	   (InPort(FADT->PM1aControlBlock, 8) & 1) == 1) {
 	   MKMI_Printf("ACPI already enabled.\r\n");
 	} else {
 		MKMI_Printf("ACPI not yet enabled.\r\n");
 
 		OutPort(FADT->SMI_CommandPort, FADT->AcpiEnable, 8);
 
-		/* TODO: Add delay here (In Linux it's 3 seconds) */
-		while((FADT->PM1aControlBlock & 1) == 0);
+		MKMI_Printf("Waiting for ACPI to switch modes.\r\n");
+		while((InPort(FADT->PM1aControlBlock, 8) & 1) == 0);
+
+		if(FADT->PM1bControlBlock != 0)
+			while((InPort(FADT->PM1bControlBlock, 8) & 1) == 0);
+		
+		MKMI_Printf("ACPI is enabled.\r\n");
 	}
+
+	/*
+	 * Code to have a reset:
+	 * OutPort(FADT->ResetReg.Address, FADT->ResetValue, 8);
+	 */
+
 
 	DSDTExecutive = new AMLExecutive();
 	DSDTExecutive->Parse((uint8_t*)DSDT + sizeof(SDTHeader), DSDT->Length - sizeof(SDTHeader));
-
+	
+	/*
+	 * Code used to find S5 object
 	Token *s5 = DSDTExecutive->FindObject("_S5_");
 	if (s5 != NULL) {
 		MKMI_Printf("Found S5 object.\r\n");
@@ -127,17 +140,21 @@ ACPIManager::ACPIManager() : RSDP(NULL), MainSDT(NULL), MainSDTType(0), FADT(NUL
 			MKMI_Printf("Found package. %d elements\r\n", package->Package.NumElements);
 
 			Token *data = package->Children->Head;
-			for (int i = 0; i <  package->Package.NumElements; i++) {
-				if(data->Type == ZERO) MKMI_Printf(" 0\r\n");
-				else if(data->Type == INTEGER) MKMI_Printf(" %d\r\n", data->Int.Data);
-				else MKMI_Printf("Invalid value type.\r\n");
+
+			for (int i = 0; i < package->Package.NumElements; i++) {
+				if(data->Type == ZERO) {
+					MKMI_Printf(" 0\r\n");
+				} else if(data->Type == INTEGER) {
+					MKMI_Printf(" %d\r\n", data->Int.Data);
+					shutdownBytes[i] = data->Int.Data;
+					MKMI_Printf("Invalid value type.\r\n");
+				}
 				
 				data = data->Next;
 			}
 		}
-
-
 	}
+	*/
 
 	MKMI_Printf("ACPI initialized.\r\n");
 }
