@@ -36,6 +36,8 @@ extern "C" size_t OnInit() {
 
 	Syscall(SYSCALL_MODULE_SECTION_REGISTER, "ACPI", VendorID, ProductID, 0, 0, 0);
 
+	PrintUserTCB();
+
 	return 0;
 }
 
