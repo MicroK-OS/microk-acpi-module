@@ -6,9 +6,12 @@
 #include <cdefs.h>
 
 ACPIManager::ACPIManager() : RSDP(NULL), MainSDT(NULL), MainSDTType(0), FADT(NULL), DSDT(NULL), DSDTExecutive(NULL) {
-	RSDP = new RSDP2;
+	/* We find the RSDP through the KBST */
+	UserTCB *tcb = GetUserTCB();
+	TableListElement *systemTableList = GetSystemTableList(tcb);
+	KBST *kbst = (KBST*)GetTableWithSignature(systemTableList, tcb->SystemTables, "KBST");
+	RSDP = (RSDP2*)kbst->RSDP;
 
-	//Syscall(SYSCALL_FILE_READ, "ACPI:RSDP", RSDP, sizeof(RSDP2), 0, 0 ,0);
 	if(RSDP->Revision != 2) {
 		Panic("Invalid ACPI RSDP revision");
 	}
