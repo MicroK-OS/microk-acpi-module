@@ -8,7 +8,7 @@
 ACPIManager::ACPIManager() : RSDP(NULL), MainSDT(NULL), MainSDTType(0), FADT(NULL), DSDT(NULL), DSDTExecutive(NULL) {
 	RSDP = new RSDP2;
 
-	Syscall(SYSCALL_FILE_READ, "ACPI:RSDP", RSDP, sizeof(RSDP2), 0, 0 ,0);
+	//Syscall(SYSCALL_FILE_READ, "ACPI:RSDP", RSDP, sizeof(RSDP2), 0, 0 ,0);
 	if(RSDP->Revision != 2) {
 		Panic("Invalid ACPI RSDP revision");
 	}
@@ -170,11 +170,8 @@ bool ACPIManager::ValidateTable(uint8_t *ptr, size_t size) {
 }
 
 void ACPIManager::PrintTable(SDTHeader *sdt) {
-	char sig[5];
-	char oem[7];
-
-	sig[4] = '\0';
-	oem[6] = '\0';
+	char sig[5] = { '\0' };
+	char oem[7] = { '\0' };
 
 	Memcpy(sig, sdt->Signature, 4);
 	Memcpy(oem, sdt->OEMID, 6);
