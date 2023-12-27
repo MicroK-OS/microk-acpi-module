@@ -45,8 +45,6 @@ int AMLExecutive::Parse(uint8_t *data, size_t size) {
 
 	MKMI_Printf("Done parsing %d bytes of AML code.\r\n", size);
 
-	return 0;
-
 	Token *current = RootTokenList->Head;
 
 	bool error = false;
